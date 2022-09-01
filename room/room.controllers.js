@@ -20,12 +20,23 @@ class Controller {
     }
     async deleteRoom(req, res, next) {
         try {
+            await RoomService.deleteRoom(req.headers.authorization, req.params);
+            res.status(200).json({ success: true, message: 'Room deleted!' });
         } catch (e) {
             next(e);
         }
     }
     async addMember(req, res, next) {
         try {
+            await RoomService.addMember(
+                req.headers.authorization,
+                req.params,
+                req.body
+            );
+            res.status(200).json({
+                success: true,
+                message: 'user added to group!',
+            });
         } catch (e) {
             next(e);
         }
