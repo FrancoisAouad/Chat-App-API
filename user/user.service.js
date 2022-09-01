@@ -18,6 +18,7 @@ import {
 } from '../lib/jwt/jwtConfig.js';
 import bcrypt from 'bcrypt';
 import globalService from '../utils/globalService.js';
+import error from 'http-errors';
 const GlobalService = new globalService();
 class Service {
     constructor() {}
@@ -30,7 +31,7 @@ class Service {
         //check if email already exists in database
         const exists = await User.findOne({ email: result.email });
         if (exists)
-            throw new Error(`${result.email} has already been registered`);
+            throw error.Conflict(`${result.email} has already been registered`);
 
         const user = new User(result);
 
@@ -62,11 +63,11 @@ class Service {
         const result = await loginSchema.validateAsync(body);
         //check if email exists
         const user = await User.findOne({ email: result.email });
-        if (!user) throw new Error('NotFound');
+        if (!user) throw error.NotFound('NotFound');
         //calls the isvalidpassword method in user model which compares the hashed password and inputed pass
         const isMatch = await user.isValidPassword(result.password);
 
-        if (isMatch === false) throw new Error('Unauthorized');
+        if (isMatch === false) throw error.Unauthorized('Unauthorized');
         //generate access and refresh token by saving calling the methods and saving in variables
         const accessToken = setAccessToken(user.id);
         // console.log(accessToken);
@@ -75,8 +76,9 @@ class Service {
 
         return { accessToken, refreshToken };
     }
+    //TO DEBUG
     async refreshToken(body) {
-        if (!body) throw new Error('BadRequest');
+        if (!body) throw error.BadRequest('BadRequest');
 
         const userId = await verifyRefreshToken(body);
 
@@ -90,13 +92,13 @@ class Service {
         //check refresh token
         const { refreshToken } = body;
         //return error if not found
-        if (!refreshToken) throw new Error('BadRequest');
+        if (!refreshToken) throw error.BadRequest('BadRequest');
         //verify the refresh token if found
         const userId = await verifyRefreshToken(refreshToken);
 
         //delete refresh token to logout
         client.DEL(userId, (error, val) => {
-            if (error) throw new Error('InternalServerError');
+            if (error) throw error('InternalServerError');
         });
         // return true;
     }
@@ -107,7 +109,7 @@ class Service {
         //check if user exists
         const user = await User.findOne({ _id: id });
         //return error if user not found
-        if (!user) throw new Error('unauthorized');
+        if (!user) throw error.Unauthorized('unauthorized');
 
         //if founnd create new token for password url
         const passwordToken = await setResetPasswordToken(user.id);
@@ -135,7 +137,7 @@ class Service {
         const id = GlobalService.getUser(header);
         //check if user found
         const user = await User.findOne({ _id: id });
-        if (!user) throw new Error('user not found..');
+        if (!user) throw error.NotFound('user not found..');
         //verify that the password token is valid
         await verifyResetPasswordToken(token);
         //salt and hash new password
@@ -150,7 +152,7 @@ class Service {
         const token = query.token;
         const user = await User.findOne({ emailToken: token });
 
-        if (!user) throw new Error('unauthorized');
+        if (!user) throw error.Unauthorized('unauthorized');
         //replace these values to show that a user is verified
         user.emailToken = 'null';
         user.isVerified = true;

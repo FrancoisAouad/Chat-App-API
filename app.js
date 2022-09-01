@@ -34,7 +34,7 @@ class App {
         this.app.use(bodyParser.urlencoded({ extended: true }));
         this.app.use(
             fileUpload({
-                createParentPath: true,
+                createParentPath: true
             })
         );
     }

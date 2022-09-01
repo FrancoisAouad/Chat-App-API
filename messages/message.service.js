@@ -3,6 +3,7 @@ import globalService from '../utils/globalService.js';
 import messagesModel from './messages.model.js';
 import userModel from '../user/user.model.js';
 import mongoose from 'mongoose';
+import error from 'http-errors';
 const GlobalService = new globalService();
 
 class Service {

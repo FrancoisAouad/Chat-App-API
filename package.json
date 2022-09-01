@@ -9,7 +9,8 @@
         "dev": "nodemon server.js",
         "gen-tokens": "node ./utils/genToken.js",
         "install-dev": "npm i",
-        "redis": "redis-server"
+        "redis": "redis-server",
+        "mongo": "mongod"
     },
     "author": "Francois J. Aouad",
     "license": "ISC",

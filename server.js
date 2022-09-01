@@ -9,7 +9,7 @@ import messageController from './messages/message.controller.js';
 import App from './app.js';
 import './lib/db/mongoCon.js';
 import './lib/db/redisCon.js';
-
+import './sockets/socket.service.js';
 const app = new App([
     new roomController(),
     new messageController(),
