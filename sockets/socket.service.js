@@ -1,16 +1,20 @@
 import { Server } from 'socket.io';
 
 const io = new Server(3000);
-console.log(io);
+
 io.on('connection', (socket) => {
-    // send a message to the client
-    socket.emit('hello from server'.yellow.bold, 1, '2', {
-        3: Buffer.from([4]),
+    console.log(`User Connected: ${socket.id}`);
+
+    socket.on('join_room', (data) => {
+        socket.join(data);
+        console.log(`User with ID: ${socket.id} joined room: ${data}`);
     });
 
-    // receive a message from the client
-    socket.on('hello from client', (...args) => {
-        // ...
-        console.log('ping');
+    socket.on('send_message', (data) => {
+        socket.to(data.room).emit('receive_message', data);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('User Disconnected', socket.id);
     });
 });

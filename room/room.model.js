@@ -4,41 +4,35 @@ const Schema = mongoose.Schema;
 const roomSchema = new Schema({
     name: {
         type: String,
-        required: true,
+        required: true
     },
     description: {
         type: String,
-        default: 'No Description..',
+        default: 'No Description..'
     },
-    members: [
-        {
-            type: mongoose.Types.ObjectId,
-            ref: 'user',
-        },
-    ],
     creatorID: {
         type: mongoose.Types.ObjectId,
-        ref: 'user',
+        ref: 'User'
     },
     messages: {
         type: mongoose.Types.ObjectId,
-        ref: 'message',
+        ref: 'Message'
     },
 
     coOwners: [
         {
             type: mongoose.Types.ObjectId,
-            ref: 'user',
-        },
+            ref: 'User'
+        }
     ],
     report: {
         type: Number,
-        default: 0,
+        default: 0
     },
     isBlocked: {
         type: Boolean,
-        default: false,
-    },
+        default: false
+    }
 });
 
-export default mongoose.model('room', roomSchema);
+export default mongoose.model('Room', roomSchema);

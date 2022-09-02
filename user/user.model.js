@@ -6,53 +6,47 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
     name: {
         type: String,
-        required: true,
+        required: true
     },
     email: {
         type: String,
         required: true,
         lowercase: true,
-        unique: true,
+        unique: true
     },
     password: {
         type: String,
-        required: true,
+        required: true
     },
     createdAt: {
         type: Date,
-        default: Date.now(),
+        default: Date.now()
     },
     emailToken: {
-        type: String,
+        type: String
     },
     isVerified: {
         type: Boolean,
-        default: false,
+        default: false
     },
     isAdmin: {
         type: Boolean,
-        default: false,
+        default: false
     },
     reports: {
         type: Number,
-        default: 0,
+        default: 0
     },
     isBlocked: {
         type: Boolean,
-        default: false,
+        default: false
     },
     rooms: [
         {
             type: mongoose.Types.ObjectId,
-            ref: 'room',
-        },
-    ],
-    messages: [
-        {
-            type: mongoose.Types.ObjectId,
-            ref: 'message',
-        },
-    ],
+            ref: 'Room'
+        }
+    ]
 });
 
 UserSchema.pre('save', async function (next) {
@@ -79,4 +73,4 @@ UserSchema.methods.isValidPassword = async function (password) {
 };
 UserSchema.index({ email: -1 });
 UserSchema.index({ emailToken: -1 });
-export default mongoose.model('user', UserSchema);
+export default mongoose.model('User', UserSchema);

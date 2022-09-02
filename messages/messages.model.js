@@ -5,33 +5,28 @@ const Schema = mongoose.Schema;
 const messageSchema = new Schema({
     content: {
         type: String,
-        required: true,
+        required: true
     },
     creatorID: {
         type: mongoose.Types.ObjectId,
-        ref: 'user',
+        ref: 'User'
     },
     roomID: {
         type: mongoose.Types.ObjectId,
-        ref: 'room',
-    },
-
-    room: {
-        type: mongoose.Types.ObjectId,
-        ref: 'room',
+        ref: 'Room'
     },
     isFlagged: {
         type: Boolean,
-        default: false,
+        default: false
     },
     createdAt: {
         type: Date,
-        default: Date.now(),
+        default: Date.now()
     },
     editedAt: {
         type: Date,
-        default: Date.now(),
-    },
+        default: Date.now()
+    }
 });
 
-export default mongoose.model('message', messageSchema);
+export default mongoose.model('Message', messageSchema);
